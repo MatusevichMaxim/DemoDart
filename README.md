@@ -164,4 +164,81 @@ In this case, we used the code-first principle, which doesn't quite align with T
 
 We restart the tests and they've turned green. 🎉
 
+## Step 3. Adding counter logic.
+First, we need to create a new `CounterModel` that will manage our counter. And we immediately need to ensure that the initial counter value is 0. This is important because this variable is mutable and could be in an unexpected state at initialization. Let's write a test:
+```dart
+test('Initial counter value should be 0', () {
+  final counter = CounterModel();
+  expect(counter.value, 0);
+});
+```
+After this, we can add the corresponding code to the model. Even though it won't immediately be red (because the default value of int = 0), **we've documented** this value in the tests.
+```dart
+class CounterModel {
+  int _value = 0;
+  int get value => _value;
+}
+```
+Now let's describe in the tests the behavior when pressing the `+` button. We want the counter to increase by 1.
+Let's write such a test:
+```dart
+test('Increment should increase value by 1', () {
+  final counter = CounterModel();
+  counter.increment();
+  expect(counter.value, 1);
+});
+```
+In it, we add a new increment function that's responsible for increasing the value. This will allow us to control the model from outside. Now we can add the corresponding logic to the model to make the test build.
+```dart
+class CounterModel {
+  int _value = 0;
+  int get value => _value;
+
+  void increment();
+}
+```
+Now let's add `value++` to make the test green:
+```dart
+class CounterModel {
+  // ... 
+  void increment() => value++;
+}
+```
+Next, let's add similar logic for subtraction. First, we write a test:
+```dart
+test('Decrement should decrease value by 1', () {
+  final counter = CounterModel();
+  counter.increment();
+  counter.decrement();
+  expect(counter.value, 0);
+});
+```
+We add the necessary function to the model. We try to run the test - it's red. We modify the logic so that the test becomes green.
+```dart
+class CounterModel {
+  // ... 
+  void decrement() => value--;
+}
+```
+Remember, we had a condition that the counter shouldn't go below 0? The first thing to do is write a test describing this condition. Something like this:
+```dart
+test('Decrement should not allow value below 0', () {
+  final counter = CounterModel();
+  counter.decrement();
+  expect(counter.value, 0);
+});
+```
+To make the test green, we need to add the following logic:
+```dart
+class CounterModel {
+  // ... 
+  void decrement() {
+    if (_value > 0) _value--;
+  }
+}
+```
+
+### And that's it!
+We've written a simple application that we've tried to cover as much as possible with tests. Yes, the approach to UI testing is different and deserves a separate branch and a more complex example. In addition, some of the functionality that we're testing here at the UI layer can be tested at other layers in the MVVM architecture, which can move our UI testing either to Snapshots or to the QA team altogether.
+
 [snt]: <https://medium.com/@pablonicoli21/unveiling-snapshot-tests-a-deep-dive-into-flutters-golden-tests-bf8acc744df8>
