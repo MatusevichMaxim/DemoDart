@@ -8,6 +8,13 @@ Follow the steps below - each includes:
 
 PS. For testing navigation, I used functional UI tests, which isn't the best solution. It's better to test the screen type directly, and if necessary, test and document the widget UI itself through [Snapshot tests][snt].
 
+### Demo App Description
+Screen 1 - "Home" header, Open Screen button. 
+Screen 2 - "Counter" header, 2 buttons -/+, 1 label with counter, back button "<".
+When you press Open Screen, screen 2 with the counter opens. The +/- buttons can increase or decrease the counter by 1. The value cannot go below 0. The "<" button returns to the previous screen.
+
+
+
 
 
 [//]: # (These are reference links used in the body of this note and get stripped out when the markdown processor does its job. There is no need to format nicely because it shouldn't be seen. Thanks SO - http://stackoverflow.com/questions/4823468/store-comments-in-markdown-syntax)
