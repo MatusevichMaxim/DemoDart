@@ -5,6 +5,7 @@ void main() {
   testWidgets('Should display Home Screen when MyApp execute', (WidgetTester tester) async {
     await tester.pumpWidget(MyApp());
 
+    expect(find.text('Home'), findsOneWidget);
     expect(find.text('Open Screen'), findsOneWidget);
   });
 }

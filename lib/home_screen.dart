@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'counter_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   @override
@@ -6,7 +7,7 @@ class HomeScreen extends StatelessWidget {
         appBar: AppBar(title: Text('Home')),
         body: Center(
           child: ElevatedButton(
-            onPressed: () => Navigator.pushNamed(context, '/counter'),
+            onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => CounterScreen())),
             child: Text('Open Screen'),
           ),
         ),
