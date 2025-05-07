@@ -9,10 +9,8 @@ Follow the steps below - each includes:
 PS. For testing navigation, I used functional UI tests, which isn't the best solution. It's better to test the screen type directly, and if necessary, test and document the widget UI itself through [Snapshot tests][snt].
 
 ### Demo App Description
-Screen 1 - "Home" header, Open Screen button. 
-
-Screen 2 - "Counter" header, 2 buttons -/+, 1 label with counter, back button "<".
-
+Screen 1 - "Home" header, Open Screen button. <br/>
+Screen 2 - "Counter" header, 2 buttons -/+, 1 label with counter, back button "<". <br/>
 When you press Open Screen, screen 2 with the counter opens. The +/- buttons can increase or decrease the counter by 1. The value cannot go below 0. The "<" button returns to the previous screen.
 
 
