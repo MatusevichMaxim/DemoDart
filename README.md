@@ -64,9 +64,7 @@ As expected, the test failed `══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWO
 ```dart
 class MyApp extends StatelessWidget {
   @override
-  Widget build(BuildContext context) => MaterialApp(
-        home: HomeScreen(),
-      );
+  Widget build(BuildContext context) => MaterialApp(home: HomeScreen());
 }
 
 class HomeScreen extends StatelessWidget {
@@ -88,6 +86,82 @@ Now we restart the tests and they become green, hooray!
 PS. *as I already mentioned, for testing UI (specifically the placement of elements down to pixels, their color, even animation) is tested using Snapshot tests.
 We wrote a UI test that can test the content of UI elements and their behavior. But since we're using MVVM, this testing will happen at the ViewModel level.*
 
+## Step 2. Implementing navigation.
+Now we need to make it so that when clicking on `Open Screen`, we go to screen 2. On the second screen, there will be a "<" button that will return us to the first screen. In addition, we can immediately add counter buttons and a label to the second screen to test it right away with a widget test.
 
+Let's create a test for the first case. This is functionality of the Home screen itself, so the test will be inside `home_test.dart`.
+```dart
+void main() {
+  testWidgets('Navigates to CounterScreen when "Open Screen" is tapped', (WidgetTester tester) async {
+    await tester.pumpWidget(MyApp());
+
+    await tester.tap(find.text('Open Screen'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Counter'), findsOneWidget);
+    expect(find.text('+'), findsOneWidget);
+    expect(find.text('-'), findsOneWidget);
+  });
+}
+```
+> PS. Here we described that when clicking the button, we expect a screen with certain elements to appear. Although for testing navigation, it's better to use type checking.
+
+As expected, the test is red. Now we can add the necessary logic so that the test doesn't fail. <br/>
+Let's create `counter_screen.dart` and `counter_test.dart`. We'll add basic UI for the counter and implement navigation logic in `home_screen.dart`
+```dart
+class HomeScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) => Scaffold(
+        appBar: AppBar(title: Text('Home')),
+        body: Center(
+          child: ElevatedButton(
+            onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => CounterScreen())),
+            child: Text('Open Screen'),
+          ),
+        ),
+      );
+}
+
+class CounterScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) => Scaffold(
+        appBar: AppBar(title: Text('Counter')),
+        body: Center(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ElevatedButton(onPressed: () => {}, child: Text('-')),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                child: Text('0', style: TextStyle(fontSize: 24)),
+              ),
+              ElevatedButton(onPressed: () => {}, child: Text('+')),
+            ],
+          ),
+        ),
+      );
+}
+```
+The "<" button was added automatically when implementing push navigation. By the way, we can check its presence through a Snapshot test, thereby covering it with tests, or use other strategies.
+
+However, the action when pressing the "<" button can still be checked through the good old UI test.
+```dart
+void main() {
+  testWidgets('Navigates back to HomeScreen when back arrow is tapped', (WidgetTester tester) async {
+    await tester.pumpWidget(MyApp());
+
+    await tester.tap(find.text('Open Screen'));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byTooltip('Back'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Open Screen'), findsOneWidget);
+  });
+}
+```
+In this case, we used the code-first principle, which doesn't quite align with TDD, so it's recommended to implement testing of basic navigations before implementing them in the project (This requires additional research).
+
+We restart the tests and they've turned green. 🎉
 
 [snt]: <https://medium.com/@pablonicoli21/unveiling-snapshot-tests-a-deep-dive-into-flutters-golden-tests-bf8acc744df8>
