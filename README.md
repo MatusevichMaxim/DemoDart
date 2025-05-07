@@ -13,10 +13,81 @@ Screen 1 - "Home" header, Open Screen button. <br/>
 Screen 2 - "Counter" header, 2 buttons -/+, 1 label with counter, back button "<". <br/>
 When you press Open Screen, screen 2 with the counter opens. The +/- buttons can increase or decrease the counter by 1. The value cannot go below 0. The "<" button returns to the previous screen.
 
+## Step 1. Creating an entry point. First screen.
+So, when creating a project, we have an entry/start point in the main.dart class in the runApp function. 
+Besides this, a default widget may already be created through the builder.
+```dart
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) => MaterialApp();
+}
+```
+Next, we need to create the first screen. <br/>
+This will be `home_screen.dart` and its test file `home_test.dart`. Now we need to somehow add the "Open Screen" button to the Home screen and display it all. <br/>
+Since we're using the TDD approach, we first need to write a "red" test and make it green.
+> For reference: <br/>
+> Flutter uses two main types of tests: `testWidgets` and `test`. The choice between them depends on what exactly we want to test. <br/>
+> `test()` (Unit Tests) <br/>
+> - Used for unit testing individual Dart functions, methods, or classes. <br/>
+> - Designed to test business logic and algorithms that don't depend on UI. <br/>
+> 
+> `testWidgets()` (Widget Tests) <br/>
+> - Used for testing widgets. <br/>
+> - Designed to test widget UI, their appearance and behavior during interaction. <br/>
+
+Each test contains a description of what is being tested. There are different ways to describe this, but I recommend following this templates: <br/>
+1. `What Is Being Tested` __ `Conditions` __ `Expected Result`
+2. `Should` __ `Expected Behavior` __ `When` __ `Conditions`
+
+The main goal is to make it possible to understand what's happening in the code without opening the class by looking at the tests.
+
+So, let's write our first test. Let's call it: "Should display Home Screen when MyApp execute"
+```dart
+void main() {
+  testWidgets('Should display Home Screen when MyApp execute', (WidgetTester tester) async {
+    await tester.pumpWidget(MyApp());
+
+    expect(find.text('Home'), findsOneWidget);
+    expect(find.text('Open Screen'), findsOneWidget);
+  });
+}
+```
+Here we immediately checked if the text Open Screen is present on the screen, as well as the Home title.
+
+To run tests, we type `flutter test` in the console (all tests will run), or click the `Run` button for a specific test/group of tests. <br/>
+As expected, the test failed `══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞══`. <br/>
+**Great**, now we can add the logic itself in the main.dart file, as well as configure the home_screen.dart screen.
+```dart
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) => MaterialApp(
+        home: HomeScreen(),
+      );
+}
+
+class HomeScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) => Scaffold(
+        appBar: AppBar(title: Text('Home')),
+        body: Center(
+          child: ElevatedButton(
+            child: Text('Open Screen'),
+          ),
+        ),
+      );
+}
+```
+Now we restart the tests and they become green, hooray!
+
+> This maneuver allowed us to fix certain elements on the screen, such as the button text and title. Any change that affects the behavior of this element will fail our test and we'll understand that something went wrong.
+
+PS. *as I already mentioned, for testing UI (specifically the placement of elements down to pixels, their color, even animation) is tested using Snapshot tests.
+We wrote a UI test that can test the content of UI elements and their behavior. But since we're using MVVM, this testing will happen at the ViewModel level.*
 
 
 
-
-[//]: # (These are reference links used in the body of this note and get stripped out when the markdown processor does its job. There is no need to format nicely because it shouldn't be seen. Thanks SO - http://stackoverflow.com/questions/4823468/store-comments-in-markdown-syntax)
-
-   [snt]: <https://medium.com/@pablonicoli21/unveiling-snapshot-tests-a-deep-dive-into-flutters-golden-tests-bf8acc744df8>
+[snt]: <https://medium.com/@pablonicoli21/unveiling-snapshot-tests-a-deep-dive-into-flutters-golden-tests-bf8acc744df8>
