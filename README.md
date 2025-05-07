@@ -1,16 +1,15 @@
-# tdd_demo
+# Step-by-Step TDD Instructions: Creating a Simple Flutter Application
+In this example, we'll develop a simple counter application using the Test-Driven Development approach. 
+Follow the steps below - each includes:
+- 🛠 Define what needs to be done. If necessary, break down complex tasks into smaller ones
+- 🔴 Write a "red" test for an elementary task
+- ✅ Implement the functionality (the test should become "green")
+- ♻️ (optional) Refactoring
 
-A new Flutter project.
+PS. For testing navigation, I used functional UI tests, which isn't the best solution. It's better to test the screen type directly, and if necessary, test and document the widget UI itself through [Snapshot tests][snt].
 
-## Getting Started
 
-This project is a starting point for a Flutter application.
 
-A few resources to get you started if this is your first Flutter project:
+[//]: # (These are reference links used in the body of this note and get stripped out when the markdown processor does its job. There is no need to format nicely because it shouldn't be seen. Thanks SO - http://stackoverflow.com/questions/4823468/store-comments-in-markdown-syntax)
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+   [snt]: <https://medium.com/@pablonicoli21/unveiling-snapshot-tests-a-deep-dive-into-flutters-golden-tests-bf8acc744df8>
