@@ -15,6 +15,31 @@ void main() {
     expect(find.text('Open Screen'), findsOneWidget);
   });
 
+  testWidgets('Tap on + should increase counter by 1', (WidgetTester tester) async {
+    await tester.pumpWidget(MyApp());
+
+    await tester.tap(find.text('Open Screen'));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('+'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('1'), findsOneWidget);
+  });
+
+  testWidgets('Tap on - should decrease counter by 1', (WidgetTester tester) async {
+    await tester.pumpWidget(MyApp());
+
+    await tester.tap(find.text('Open Screen'));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('+'));
+    await tester.tap(find.text('-'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('0'), findsOneWidget);
+  });
+
   test('Initial counter value should be 0', () {
     final counter = CounterModel();
     expect(counter.value, 0);
