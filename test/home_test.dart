@@ -11,5 +11,7 @@ void main() {
     expect(find.text('Counter'), findsOneWidget);
     expect(find.text('+'), findsOneWidget);
     expect(find.text('-'), findsOneWidget);
+    expect(find.text('+7'), findsOneWidget);
+    expect(find.text('-7'), findsOneWidget);
   });
 }

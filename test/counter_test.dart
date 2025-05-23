@@ -40,6 +40,31 @@ void main() {
     expect(find.text('0'), findsOneWidget);
   });
 
+  testWidgets('Tap on +7 should increase counter by 7', (WidgetTester tester) async {
+    await tester.pumpWidget(MyApp());
+
+    await tester.tap(find.text('Open Screen'));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('+7'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('7'), findsOneWidget);
+  });
+
+  testWidgets('Tap on -7 should decrease counter by 7', (WidgetTester tester) async {
+    await tester.pumpWidget(MyApp());
+
+    await tester.tap(find.text('Open Screen'));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('+7'));
+    await tester.tap(find.text('-7'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('0'), findsOneWidget);
+  });
+
   test('Initial counter value should be 0', () {
     final counter = CounterModel();
     expect(counter.value, 0);
@@ -61,6 +86,26 @@ void main() {
   test('Decrement should not allow value below 0', () {
     final counter = CounterModel();
     counter.decrement();
+    expect(counter.value, 0);
+  });
+
+  test('Increment by 7 should increase value by 7', () {
+    final counter = CounterModel();
+    counter.incrementByWeek();
+    expect(counter.value, 7);
+  });
+
+  test('Decrement by 7 should descrease value by 7', () {
+    final counter = CounterModel();
+    counter.incrementByWeek();
+    counter.decrementByWeek();
+    expect(counter.value, 0);
+  });
+
+  test('Decrement by week should not allow value below 0', () {
+    final counter = CounterModel();
+    counter.increment();
+    counter.decrementByWeek();
     expect(counter.value, 0);
   });
 }
